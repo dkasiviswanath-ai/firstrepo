@@ -1,50 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title> My Garden</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terrarium Project</title>
     <link rel="stylesheet" href="./style.css">
-    <script src="./script.js" defer></script>
 </head>
-
 <body>
-    <h1> Welcome to My Garden </h1>
-    <div id="page">
-        <div id="left-container" class="container">
-            <div class="plant-holder">
-                <img class="plant" id="plant1" src="./images/image1.jpg" alt="tall cactus" >
-            </div>
-            <div class="plant-holder">
-                <img class="plant" id="plant2" src="./images/image2.jpg" alt="small cactus" >
-            </div>
-            <div class="plant-holder">
-                <img class="plant" id="plant3" src="./images/image3.jpg" alt="round cactus">
-            </div>
-        </div>
-
-        <div id="right-container" class="container">
-            <div class="plant-holder">
-                <img class="plant" id="plant4" src="./images/image4.jpg" alt="tall cactus" >
-            </div>
-            <div class="plant-holder">
-                <img class="plant" id="plant5" src="./images/image5.jpg" alt="small cactus" >
-            </div>
-            <div class="plant-holder">
-                <img class="plant" id="plant6" src="./images/image6.jpg" alt="round cactus">
+    <h1>🌿 My Terrarium 🌿</h1>
+    
+    <div class="main-container">
+        <!-- LEFT PLANTS -->
+        <div class="plants-container left-plants">
+            <h2>Left Plants</h2>
+            <div class="plants-list">
+                <div class="plant" draggable="true" data-plant="🌵">
+                    <p>🌵</p>
+                    <span>Cactus</span>
+                </div>
+                <div class="plant" draggable="true" data-plant="🌻">
+                    <p>🌻</p>
+                    <span>Flower</span>
+                </div>
+                <div class="plant" draggable="true" data-plant="🌱">
+                    <p>🌱</p>
+                    <span>Seedling</span>
+                </div>
             </div>
         </div>
 
-        <div id="terrarium">
-            <div class="jar-top"></div>
-            <div class="jar-walls"></div>
-            <div class="jar-glossy-long"></div>
-            <div class="jar-glossy-short"></div>
-            <div class="dirt"></div>
+        <!-- CENTER TERRARIUM -->
+        <div class="terrarium-container">
+            <div class="terrarium" id="terrarium">
+                <div class="jar-top"></div>
+                <div class="jar-body"></div>
+                <div class="soil"></div>
+                <div id="plants-area" class="plants-area">
+                    <p class="drop-hint">Drop plants here!</p>
+                </div>
+            </div>
         </div>
 
+        <!-- RIGHT PLANTS -->
+        <div class="plants-container right-plants">
+            <h2>Right Plants</h2>
+            <div class="plants-list">
+                <div class="plant" draggable="true" data-plant="🌿">
+                    <p>🌿</p>
+                    <span>Leaf</span>
+                </div>
+                <div class="plant" draggable="true" data-plant="🍀">
+                    <p>🍀</p>
+                    <span>Clover</span>
+                </div>
+                <div class="plant" draggable="true" data-plant="🌾">
+                    <p>🌾</p>
+                    <span>Grass</span>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
 
+    <div class="reset-container">
+        <button id="reset-btn">Reset Terrarium</button>
+    </div>
+
+    <script src="./script.js" defer></script>
+</body>
 </html>
