@@ -1,56 +1,93 @@
-dragElement(document.getElementById('plant1'));
-dragElement(document.getElementById('plant2'));
-dragElement(document.getElementById('plant3'));
-dragElement(document.getElementById('plant4'));
-dragElement(document.getElementById('plant5'));
-dragElement(document.getElementById('plant6'));
-dragElement(document.getElementById('plant7'));
-dragElement(document.getElementById('plant8'));
+// Get all plants and terrarium
+const plants = document.querySelectorAll('.plant');
+const plantsArea = document.getElementById('plants-area');
+const resetBtn = document.getElementById('reset-btn');
 
-/*"A closure is the combination of a function bundled together (enclosed) 
-with references to its surrounding state (the lexical environment). 
-In other words, a closure gives you access to an outer function’s scope 
-from an inner function." Create a closure so that you can track the dragged element*/
+// Array to store plants in terrarium
+let plantsInTerrarium = [];
 
-function dragElement(terrariumElement) {
-	//set 4 positions for positioning on the screen
-	let pos1 = 0,
-		pos2 = 0,
-		pos3 = 0,
-		pos4 = 0;
-	terrariumElement.onpointerdown = pointerDrag;
+// Setup drag and drop for all plants
+plants.forEach(plant => {
+	plant.addEventListener('dragstart', handleDragStart);
+	plant.addEventListener('dragend', handleDragEnd);
+});
 
-	function pointerDrag(e) {
-		e.preventDefault();
-		console.log(e);
-		// get the initial mouse cursor position for pos3 and pos4
-		pos3 = e.clientX;
-		pos4 = e.clientY;
-		// when the mouse moves, start the drag
-		document.onpointermove = elementDrag;
-		// when the mouse is lifted, stop the drag
-		document.onpointerup = stopElementDrag;
+// Setup terrarium drop zone
+plantsArea.addEventListener('dragover', handleDragOver);
+plantsArea.addEventListener('dragleave', handleDragLeave);
+plantsArea.addEventListener('drop', handleDrop);
+
+// Reset button
+resetBtn.addEventListener('click', resetTerrarium);
+
+// DRAG FUNCTIONS
+function handleDragStart(e) {
+	e.dataTransfer.effectAllowed = 'copy';
+	e.dataTransfer.setData('text/html', this.innerHTML);
+	e.dataTransfer.setData('plantEmoji', this.getAttribute('data-plant'));
+	this.style.opacity = '0.6';
+}
+
+function handleDragEnd(e) {
+	this.style.opacity = '1';
+	plantsArea.classList.remove('drag-over');
+}
+
+function handleDragOver(e) {
+	e.preventDefault();
+	e.dataTransfer.dropEffect = 'copy';
+	plantsArea.classList.add('drag-over');
+}
+
+function handleDragLeave(e) {
+	if (e.target === plantsArea) {
+		plantsArea.classList.remove('drag-over');
 	}
+}
 
-	function elementDrag(e) {
-		// calculate the new cursor position
-		// pos1 = where the Xmouse WAS - where it IS
-		pos1 = pos3 - e.clientX;
-		// pos2 = where the Ymouse WAS - where it IS
-		pos2 = pos4 - e.clientY;
-		//reset pos3 to current location of Xmouse
-		pos3 = e.clientX;
-		//reset pos4 to current location of Ymouse
-		pos4 = e.clientY;
-		console.log(pos1, pos2, pos3, pos4);
-		// set the element's new position:
-		terrariumElement.style.top = terrariumElement.offsetTop - pos2 + 'px';
-		terrariumElement.style.left = terrariumElement.offsetLeft - pos1 + 'px';
+function handleDrop(e) {
+	e.preventDefault();
+	plantsArea.classList.remove('drag-over');
+	
+	const plantEmoji = e.dataTransfer.getData('plantEmoji');
+	
+	if (plantEmoji) {
+		addPlantToTerrarium(plantEmoji);
 	}
+}
 
-	function stopElementDrag() {
-		// stop calculating when mouse is released
-		document.onpointerup = null;
-		document.onpointermove = null;
+// Add plant to terrarium
+function addPlantToTerrarium(emoji) {
+	// Create a plant element in terrarium
+	const plantDiv = document.createElement('div');
+	plantDiv.className = 'plant-in-terrarium';
+	plantDiv.textContent = emoji;
+	
+	// Add to array
+	plantsInTerrarium.push(emoji);
+	
+	// Add to DOM
+	plantsArea.appendChild(plantDiv);
+	
+	// Remove hint if it exists
+	const hint = plantsArea.querySelector('.drop-hint');
+	if (hint) {
+		hint.style.display = 'none';
 	}
+	
+	// Add class to plants-area if it has plants
+	plantsArea.classList.add('has-plants');
+	
+	// Add animation by removing and re-adding class
+	plantDiv.style.animation = 'none';
+	setTimeout(() => {
+		plantDiv.style.animation = '';
+	}, 10);
+}
+
+// Reset terrarium
+function resetTerrarium() {
+	plantsInTerrarium = [];
+	plantsArea.innerHTML = '<p class="drop-hint">Drop plants here!</p>';
+	plantsArea.classList.remove('has-plants');
 }
